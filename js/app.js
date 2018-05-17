@@ -1,14 +1,90 @@
+//Array holding the icons used in the cards
+const iconsArr = ["diamond", "diamond", "paper-plane-o", "paper-plane-o", "anchor", "anchor", "bolt", "bolt",
+                    "cube", "cube", "leaf", "leaf", "bicycle", "bicycle", "bomb", "bomb"];
+const deck = document.querySelector(".deck");
+
+var timerStarted;
+
 /*
- * Create a list that holds all of your cards
+ * @description starts game by:
+ *      - generating new cards set
+ *      - resetting the timer
+ *      - resetting the stars
+ *      - resetting number of moves
  */
+function initGame(){
+    generateCards(iconsArr.length);
+
+    timerStarted = false;
+    deck.addEventListener("click", onCardClick);
+}
 
 
 /*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
+ * @description generates list of random cards and adds them to the deck
+ * @param {number} cardNum - the number of cards to be generated
  */
+function generateCards(cardNum){
+    //shuffle(iconsArr);
+
+    let fragment = document.createDocumentFragment();
+    let card;
+
+    for(let i = 0; i < cardNum; i++){
+        card = document.createElement('li');
+        card.innerHTML = '<i class="fa fa-'+ iconsArr[i] +'"></i>';
+        card.classList.add("card");
+
+        fragment.appendChild(card);
+    }
+
+    deck.innerHTML = "";
+    deck.appendChild(fragment);
+};
+
+function onCardClick(event){
+    if(!timerStarted){
+        timerStarted = true;
+        //call start timer function
+    }
+    if(event.target.nodeName === "LI" && event.target.className == "card"){
+        event.target.classList.add("open");
+        event.target.classList.add("show");
+
+        let openedCards = document.querySelectorAll(".open");
+        if(openedCards.length == 2){
+
+            if(openedCards[0].querySelector(".fa").className == openedCards[1].querySelector(".fa").className){
+                openedCards[0].classList.remove("open");
+                openedCards[0].classList.remove("show");
+                openedCards[0].classList.add("match");
+
+                openedCards[1].classList.remove("open");
+                openedCards[1].classList.remove("show");
+                openedCards[1].classList.add("match");
+
+                if(document.querySelectorAll(".match").length == iconsArr.length){
+                    //show win screen
+                    console.log("win");
+                }
+            }
+            else{
+                deck.removeEventListener("click", onCardClick);
+                setTimeout(function () {
+                    let openedCards = document.querySelectorAll(".open");
+                    openedCards[0].classList.remove("open");
+                    openedCards[0].classList.remove("show");
+
+                    openedCards[1].classList.remove("open");
+                    openedCards[1].classList.remove("show");
+
+                    deck.addEventListener("click", onCardClick);
+                },500);
+            }
+        }
+    }
+};
+
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -36,3 +112,5 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
+
+initGame();
