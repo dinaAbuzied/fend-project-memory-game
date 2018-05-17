@@ -2,8 +2,13 @@
 const iconsArr = ["diamond", "diamond", "paper-plane-o", "paper-plane-o", "anchor", "anchor", "bolt", "bolt",
                     "cube", "cube", "leaf", "leaf", "bicycle", "bicycle", "bomb", "bomb"];
 const deck = document.querySelector(".deck");
+const movesHolder = document.querySelector(".moves");
+
+const restartBtn = document.querySelector(".restart");
+restartBtn.addEventListener("click", initGame);
 
 var timerStarted;
+var movesNum;
 
 /*
  * @description starts game by:
@@ -16,6 +21,8 @@ function initGame(){
     generateCards(iconsArr.length);
 
     timerStarted = false;
+    movesNum = 0;
+    movesHolder.textContent = movesNum;
     deck.addEventListener("click", onCardClick);
 }
 
@@ -43,11 +50,15 @@ function generateCards(cardNum){
 };
 
 function onCardClick(event){
+    console.log("click");
     if(!timerStarted){
         timerStarted = true;
         //call start timer function
     }
     if(event.target.nodeName === "LI" && event.target.className == "card"){
+        movesNum++;
+        movesHolder.textContent = movesNum;
+
         event.target.classList.add("open");
         event.target.classList.add("show");
 
@@ -65,6 +76,7 @@ function onCardClick(event){
 
                 if(document.querySelectorAll(".match").length == iconsArr.length){
                     //show win screen
+                    deck.removeEventListener("click", onCardClick);
                     console.log("win");
                 }
             }
