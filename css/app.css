@@ -91,11 +91,16 @@ h1 {
     margin-bottom: 10px;
 }
 
+.score-panel .timer {
+    width: 45px;
+    display: inline-block;
+}
+
 .score-panel .stars {
     margin: 0;
     padding: 0;
     display: inline-block;
-    margin: 0 5px 0 0;
+    margin: 0 5px;
 }
 
 .score-panel .stars li {

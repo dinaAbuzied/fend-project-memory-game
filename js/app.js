@@ -3,12 +3,17 @@ const iconsArr = ["diamond", "diamond", "paper-plane-o", "paper-plane-o", "ancho
                     "cube", "cube", "leaf", "leaf", "bicycle", "bicycle", "bomb", "bomb"];
 const deck = document.querySelector(".deck");
 const movesHolder = document.querySelector(".moves");
+const timerHolder = document.querySelector(".timer");
 
 const restartBtn = document.querySelector(".restart");
 restartBtn.addEventListener("click", initGame);
 
 var timerStarted;
+var timerID;
 var movesNum;
+
+var min;
+var sec;
 
 /*
  * @description starts game by:
@@ -20,11 +25,16 @@ var movesNum;
 function initGame(){
     generateCards(iconsArr.length);
 
+    min = 0;
+    sec = 0;
+
     timerStarted = false;
     movesNum = 0;
     movesHolder.textContent = movesNum;
+    timerHolder.textContent = "00:00";
+    if(timerID) clearInterval(timerID);
     deck.addEventListener("click", onCardClick);
-}
+};
 
 
 /*
@@ -53,7 +63,7 @@ function onCardClick(event){
     console.log("click");
     if(!timerStarted){
         timerStarted = true;
-        //call start timer function
+        timerID = setInterval(setTime, 1000);
     }
     if(event.target.nodeName === "LI" && event.target.className == "card"){
         movesNum++;
@@ -76,6 +86,7 @@ function onCardClick(event){
 
                 if(document.querySelectorAll(".match").length == iconsArr.length){
                     //show win screen
+                    clearInterval(timerID);
                     deck.removeEventListener("click", onCardClick);
                     console.log("win");
                 }
@@ -95,6 +106,23 @@ function onCardClick(event){
             }
         }
     }
+};
+
+function setTime() {
+    sec++;
+
+    if(sec >= 60){
+        min++;
+        sec = 0;
+    }
+
+    let timeStr = "";
+
+    min < 10 ? timeStr += "0" + min.toString() : timeStr += min.toString();
+    timeStr += ":";
+    sec < 10 ? timeStr += "0" + sec.toString() : timeStr += sec.toString();
+
+    timerHolder.textContent = timeStr;
 };
 
 
