@@ -60,7 +60,6 @@ function generateCards(cardNum){
 };
 
 function onCardClick(event){
-    console.log("click");
     if(!timerStarted){
         timerStarted = true;
         timerID = setInterval(setTime, 1000);
@@ -68,6 +67,15 @@ function onCardClick(event){
     if(event.target.nodeName === "LI" && event.target.className == "card"){
         movesNum++;
         movesHolder.textContent = movesNum;
+
+        switch (true){
+            case movesNum == 5:
+            case movesNum == 10:
+                let stars = document.querySelectorAll(".fa-star");
+                stars[stars.length - 1].classList.remove("fa-star");
+                stars[stars.length - 1].classList.add("fa-star-o");
+                break;
+        }
 
         event.target.classList.add("open");
         event.target.classList.add("show");
