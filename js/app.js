@@ -34,7 +34,7 @@ function initGame(){
     timerHolder.textContent = "00:00";
     if(timerID) clearInterval(timerID);
     deck.addEventListener("click", onCardClick);
-};
+}
 
 
 /*
@@ -57,64 +57,50 @@ function generateCards(cardNum){
 
     deck.innerHTML = "";
     deck.appendChild(fragment);
-};
+}
 
 function onCardClick(event){
     if(!timerStarted){
         timerStarted = true;
         timerID = setInterval(setTime, 1000);
     }
+
     if(event.target.nodeName === "LI" && event.target.className == "card"){
-        movesNum++;
-        movesHolder.textContent = movesNum;
-
-        switch (true){
-            case movesNum == 5:
-            case movesNum == 10:
-                let stars = document.querySelectorAll(".fa-star");
-                stars[stars.length - 1].classList.remove("fa-star");
-                stars[stars.length - 1].classList.add("fa-star-o");
-                break;
-        }
-
-        event.target.classList.add("open");
-        event.target.classList.add("show");
+        event.target.classList.add("open", "show");
 
         let openedCards = document.querySelectorAll(".open");
         if(openedCards.length == 2){
-
-            if(openedCards[0].querySelector(".fa").className == openedCards[1].querySelector(".fa").className){
-                openedCards[0].classList.remove("open");
-                openedCards[0].classList.remove("show");
-                openedCards[0].classList.add("match");
-
-                openedCards[1].classList.remove("open");
-                openedCards[1].classList.remove("show");
-                openedCards[1].classList.add("match");
-
-                if(document.querySelectorAll(".match").length == iconsArr.length){
-                    //show win screen
-                    clearInterval(timerID);
-                    deck.removeEventListener("click", onCardClick);
-                    console.log("win");
-                }
-            }
-            else{
-                deck.removeEventListener("click", onCardClick);
-                setTimeout(function () {
-                    let openedCards = document.querySelectorAll(".open");
-                    openedCards[0].classList.remove("open");
-                    openedCards[0].classList.remove("show");
-
-                    openedCards[1].classList.remove("open");
-                    openedCards[1].classList.remove("show");
-
-                    deck.addEventListener("click", onCardClick);
-                },500);
-            }
+            incrementMoves();
+            openedCards[0].querySelector(".fa").className == openedCards[1].querySelector(".fa").className ? matchCards(openedCards) : closeCards();
         }
     }
-};
+}
+
+function matchCards (openedCards) {
+    openedCards[0].classList.remove("open", "show");
+    openedCards[0].classList.add("match");
+
+    openedCards[1].classList.remove("open", "show");
+    openedCards[1].classList.add("match");
+
+    if(document.querySelectorAll(".match").length == iconsArr.length){
+        //show win screen
+        clearInterval(timerID);
+        deck.removeEventListener("click", onCardClick);
+        console.log("win");
+    }
+}
+
+function closeCards() {
+    deck.removeEventListener("click", onCardClick);
+    setTimeout(function () {
+        let openedCards = document.querySelectorAll(".open");
+        openedCards[0].classList.remove("open", "show");
+        openedCards[1].classList.remove("open", "show");
+
+        deck.addEventListener("click", onCardClick);
+    },500);
+}
 
 function setTime() {
     sec++;
@@ -131,7 +117,21 @@ function setTime() {
     sec < 10 ? timeStr += "0" + sec.toString() : timeStr += sec.toString();
 
     timerHolder.textContent = timeStr;
-};
+}
+
+function incrementMoves() {
+    movesNum++;
+    movesHolder.textContent = movesNum;
+
+    switch (true){
+        case movesNum == 8:
+        case movesNum == 12:
+            let stars = document.querySelectorAll(".fa-star");
+            stars[stars.length - 1].classList.remove("fa-star");
+            stars[stars.length - 1].classList.add("fa-star-o");
+            break;
+    }
+}
 
 
 // Shuffle function from http://stackoverflow.com/a/2450976
