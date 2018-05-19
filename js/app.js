@@ -2,11 +2,20 @@
 const iconsArr = ["diamond", "diamond", "paper-plane-o", "paper-plane-o", "anchor", "anchor", "bolt", "bolt",
                     "cube", "cube", "leaf", "leaf", "bicycle", "bicycle", "bomb", "bomb"];
 const deck = document.querySelector(".deck");
-const movesHolder = document.querySelector(".moves");
-const timerHolder = document.querySelector(".timer");
+const movesHolder = document.querySelector(".score-panel .moves");
+const timerHolder = document.querySelector(".score-panel .timer");
+const popup = document.getElementById('winPopup');
 
 const restartBtn = document.querySelector(".restart");
 restartBtn.addEventListener("click", initGame);
+
+const playAgainBtn = document.querySelector(".modal-footer button");
+playAgainBtn.addEventListener("click", initGame);
+
+var bestTime = {
+    min: 0,
+    sec: 0
+}
 
 var timerStarted;
 var timerID;
@@ -23,10 +32,18 @@ var sec;
  *      - resetting number of moves
  */
 function initGame(){
+    popup.style.display = "none";
+
     generateCards(iconsArr.length);
 
     min = 0;
     sec = 0;
+
+    let stars = document.querySelectorAll(".score-panel .fa-star-o");
+
+    for(let i = 0; i < stars.length; i++){
+        stars[i].classList.replace("fa-star-o", "fa-star");
+    }
 
     timerStarted = false;
     movesNum = 0;
@@ -86,8 +103,14 @@ function matchCards (openedCards) {
 
     if(document.querySelectorAll(".match").length == iconsArr.length){
         clearInterval(timerID);
+
+        if((bestTime.min * 60) + bestTime.sec == 0 || (min * 60) + sec < (bestTime.min * 60) + bestTime.sec) {
+            bestTime.min = min;
+            bestTime.sec = sec;
+        }
+
         deck.removeEventListener("click", onCardClick);
-        //showWinPopup();
+        showWinPopup();
     }
 }
 
@@ -128,9 +151,8 @@ function incrementMoves() {
     switch (true){
         case movesNum == 8:
         case movesNum == 12:
-            let stars = document.querySelectorAll(".fa-star");
-            stars[stars.length - 1].classList.remove("fa-star");
-            stars[stars.length - 1].classList.add("fa-star-o");
+            let stars = document.querySelectorAll(".score-panel .fa-star");
+            stars[stars.length - 1].classList.replace("fa-star", "fa-star-o");
             break;
     }
 }
@@ -151,5 +173,34 @@ function shuffle(array) {
     return array;
 }
 
+function showWinPopup() {
+    document.querySelector(".modal-body .stars").innerHTML = document.querySelector(".score-panel .stars").innerHTML;
+
+    document.querySelector(".modal-body .moves").textContent = movesNum;
+
+    let timeStr = "";
+
+    min < 10 ? timeStr += "0" + min.toString() : timeStr += min.toString();
+    timeStr += ":";
+    sec < 10 ? timeStr += "0" + sec.toString() : timeStr += sec.toString();
+    document.querySelector(".modal-body .timer").textContent = timeStr;
+
+    timeStr = "";
+    bestTime.min < 10 ? timeStr += "0" + bestTime.min.toString() : timeStr += bestTime.min.toString();
+    timeStr += ":";
+    bestTime.sec < 10 ? timeStr += "0" + bestTime.sec.toString() : timeStr += bestTime.sec.toString();
+    document.querySelector(".modal-body .best-time").textContent = timeStr;
+
+    popup.style.display = "block";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    let closeBtn = document.querySelector(".close-btn");
+
+    if (event.target == popup || event.target == closeBtn) {
+        popup.style.display = "none";
+    }
+}
 
 initGame();
