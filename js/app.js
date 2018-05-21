@@ -12,13 +12,17 @@ restartBtn.addEventListener("click", initGame);
 const playAgainBtn = document.querySelector(".modal-footer button");
 playAgainBtn.addEventListener("click", initGame);
 
+
+//Object stores the fastest time the user won a game
 var bestTime = {
     min: 0,
     sec: 0
 }
 
+//Boolean that is turned to true when the user first click a card to start the timer
 var timerStarted;
-var timerID;
+var timerID; //stores the id given by setInterval function
+
 var movesNum;
 
 var min;
@@ -34,6 +38,7 @@ var sec;
 function initGame(){
     popup.style.display = "none";
 
+    shuffle(iconsArr);
     generateCards(iconsArr.length);
 
     min = 0;
@@ -76,6 +81,13 @@ function generateCards(cardNum){
     deck.appendChild(fragment);
 }
 
+/*
+ * @description is triggered when the user clicks on any card
+ *      - starts the timer (if not started)
+ *      - opens the card (by adding "open" & "show" classes)
+ *      - add card animation
+ *      - if there are two open cards checks if they are a match
+ */
 function onCardClick(event){
     if(!timerStarted){
         timerStarted = true;
@@ -144,6 +156,11 @@ function setTime() {
     timerHolder.textContent = timeStr;
 }
 
+/*
+ * @description
+ *      - increses number of moves displayed on screen
+ *      - check star rating
+ */
 function incrementMoves() {
     movesNum++;
     movesHolder.textContent = movesNum;
@@ -173,6 +190,13 @@ function shuffle(array) {
     return array;
 }
 
+/*
+ * @description displays the win popup including:
+ *      - star rating
+ *      - number of moves
+ *      - current game time
+ *      - best game time
+ */
 function showWinPopup() {
     document.querySelector(".modal-body .stars").innerHTML = document.querySelector(".score-panel .stars").innerHTML;
 
