@@ -158,7 +158,7 @@ function setTime() {
 
 /*
  * @description
- *      - increses number of moves displayed on screen
+ *      - increases number of moves displayed on screen
  *      - check star rating
  */
 function incrementMoves() {
@@ -166,8 +166,8 @@ function incrementMoves() {
     movesHolder.textContent = movesNum;
 
     switch (true){
-        case movesNum == 8:
-        case movesNum == 12:
+        case movesNum == 10:
+        case movesNum == 16:
             let stars = document.querySelectorAll(".score-panel .fa-star");
             stars[stars.length - 1].classList.replace("fa-star", "fa-star-o");
             break;

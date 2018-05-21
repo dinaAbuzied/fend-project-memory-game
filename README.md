@@ -1,20 +1,12 @@
 # Memory Game Project
+by Dina Abuzied
 
-## Table of Contents
+## Description
+It is a memory game where you need to match pairs of tiles. Playing is very simple - you turn over one tile and then try to find a matching tile.
 
-* [Instructions](#instructions)
-* [Contributing](#contributing)
+## How to Play
 
-## Instructions
-
-The starter project has some HTML and CSS styling to display a static version of the Memory Game project. You'll need to convert this project from a static project to an interactive one. This will require modifying the HTML and CSS files, but primarily the JavaScript file.
-
-To get started, open `js/app.js` and start building out the app's functionality
-
-For specific, detailed instructions, look at the project instructions in the [Udacity Classroom](https://classroom.udacity.com/me).
-
-## Contributing
-
-This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests.
-
-For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+* User open 2 cards at a time.
+* Mismatched cards will be turned over, and the user must select a new pair of cards.
+* User wins once all 8 pairs are matched.
+* User is given a rating of 1 star to 3 stars depending on how many moves are made.
